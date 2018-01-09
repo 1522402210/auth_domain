@@ -1,8 +1,13 @@
 import requests
-import threading
 import logging
+import threading
+from concurrent import futures
+import datetime
 
+max_threads = 50  # 最大并发线程数
 logging.basicConfig(level=logging.INFO, format="%(message)s")
+executor = futures.ThreadPoolExecutor(max_workers=max_threads)
+threadpool_container = []  # 线程池容器
 
 headers = {
     'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
@@ -15,30 +20,58 @@ headers = {
 
 def handler(url):
     try:
-        r = requests.get(url=url, headers=headers, timeout=5)
+        max_timeout = 5  # 最大请求超时时间
+        r = requests.get(url=url, headers=headers, timeout=max_timeout)
         content = r.content
         if content:
             logging.info(
-                "{} => {} => {}".format(url, r.status_code,
-                                        r.headers['Server']))
+                "[-] {} => {} => {}".format(url, r.status_code,
+                                            r.headers['Server']))
     except:
-        # logging.info("{} - Connect Timeout！".format(url))
         pass
     finally:
         pass
 
 
-if __name__ == '__main__':
+def shutdown():
+    try:
+        while True:
+            flag = True
+
+            for t in threadpool_container:
+                flag = flag and t.done()  # 调用是否成功取消或运行完成
+
+            if flag:
+                executor.shutdown()  # 清理池
+                logging.info("[*] 所有线程已结束！")
+                break
+    except:
+        pass
+
+
+def run():
     try:
         with open('url.txt') as f:
             while True:
                 line = f.readline()
                 if line:
                     url = "http://" + line.strip()
-                    threading.Thread(target=handler, args=(url,)).start()
+                    t = executor.submit(handler, url)
+                    threadpool_container.append(t)
+                    # threading.Thread(target=handler, args=(url,)).start()
                 else:
                     break
-    except:
+    except Exception as e:
+        print(e)
         pass
     finally:
-        logging.info('所有线程已启动，请等待域名验证完成!')
+        logging.info('[+] 所有线程已启动，请等待域名验证完成!')
+        shutdown()
+
+
+if __name__ == '__main__':
+    start = datetime.datetime.now()
+    run()
+    end = datetime.datetime.now()
+    delta = (end - start).total_seconds()
+    logging.info("[*] 总耗时{}秒".format(delta))
