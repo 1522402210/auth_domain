@@ -20,7 +20,7 @@ headers = {
 
 def handler(url):
     try:
-        max_timeout = 5  # 最大请求超时时间
+        max_timeout = 3  # 最大请求超时时间
         r = requests.get(url=url, headers=headers, timeout=max_timeout)
         content = r.content
         if content:
@@ -71,10 +71,10 @@ def run():
                 else:
                     break
     except Exception as e:
-        print(e)
+        # print(e)
         pass
     finally:
-        logging.info('[+] 所有线程已启动，请等待域名验证完成!')
+        # logging.info('[+] 所有线程已启动，请等待域名验证完成!')
         shutdown()
 
 
