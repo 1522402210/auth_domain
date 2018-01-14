@@ -20,13 +20,22 @@ headers = {
 
 def handler(url):
     try:
-        max_timeout = 5  # 最大请求超时时间
+        max_timeout = 3  # 最大请求超时时间
         r = requests.get(url=url, headers=headers, timeout=max_timeout)
         content = r.content
         if content:
-            logging.info(
-                "[-] {} => {} => {}".format(url, r.status_code,
-                                            r.headers['Server']))
+            if not r.history:
+                logging.info(
+                    "[ ] {} -> {} -> {}".format(url, r.status_code,
+                                                r.headers['Server']))
+            else:
+                lst = []
+                for code in r.history:
+                    lst.append(code.status_code)
+                lst.append(r.status_code)
+                logging.info(
+                    "[+] {} -> {} -> {}".format(url, lst,
+                                                r.headers['Server']))
     except:
         pass
     finally:
@@ -43,7 +52,7 @@ def shutdown():
 
             if flag:
                 executor.shutdown()  # 清理池
-                logging.info("[*] 所有线程已结束！")
+
                 break
     except:
         pass
@@ -62,10 +71,10 @@ def run():
                 else:
                     break
     except Exception as e:
-        print(e)
+        # print(e)
         pass
     finally:
-        logging.info('[+] 所有线程已启动，请等待域名验证完成!')
+        # logging.info('[+] 所有线程已启动，请等待域名验证完成!')
         shutdown()
 
 
@@ -74,4 +83,4 @@ if __name__ == '__main__':
     run()
     end = datetime.datetime.now()
     delta = (end - start).total_seconds()
-    logging.info("[*] 总耗时{}秒".format(delta))
+    logging.info("[*] 所有线程已结束！总耗时{}秒".format(delta))
