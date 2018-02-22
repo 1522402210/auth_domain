@@ -64,8 +64,8 @@ class Src:
                         break
         except Exception:
             pass
-        finally:
-            logging.info('[+] 所有线程已启动，请等待域名验证完成!')
+        # finally:
+        #     logging.info('[+] 所有线程已启动，请等待域名验证完成!')
 
 
 if __name__ == '__main__':
