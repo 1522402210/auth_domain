@@ -20,10 +20,12 @@ nma指定开放端口识别Banner：sudo nmap -A --script=banner -p T:21,22,23,2
 ```
 将整理后的子域名存放在url.txt文件中。
 
-#### 输出主要分两部分：
+#### 输出主要分三部分：
 ![result](result.png)
+* 状态码：如果有多个验证码，代表访问该域名所经过的所有跳转后的状态码，比如 http://jingyan.ganji.com => [302, 200] 就经过了一次临时跳转才停止，使用$ curl -I http://jingyan.ganji.com -L也可以看到整个跳转过程：
+* Banner信息就简单了，就是获取Response中的HTTP 头中对应的值。
+* 网页TITLE。
 
-1.状态码：如果有多个验证码，代表访问该域名所经过的所有跳转后的状态码，比如 http://jingyan.ganji.com => [302, 200] 就经过了一次临时跳转才停止，使用$ curl -I http://jingyan.ganji.com -L也可以看到整个跳转过程：
 ```
 $ curl -I http://jingyan.ganji.com -L
 HTTP/1.1 302 Found
@@ -43,10 +45,5 @@ Connection: keep-alive
 Vary: Accept-Encoding
 Cache-Control: private, must-revalidate
 ```
-
-2.Banner信息就简单了，就是获取Response中的HTTP 头中对应的值。
-
-3.网页TITLE。
-
 
 2018-02-25 00:47:27
