@@ -12,7 +12,7 @@ nma指定开放端口识别Banner：sudo nmap -A --script=banner -p T:21,22,23,2
 接着依葫芦画瓢实现了一个可以获取域名响应码、Banner(Server、X-Powered-By)、网页TITLE的脚本:
 
 
-#### 几种子域名收集方式：
+## 几种子域名收集方式：
 ```
 1. https://github.com/lijiejie/subDomainsBrute
 2. https://github.com/Chora10/FuzzDomain
@@ -20,7 +20,7 @@ nma指定开放端口识别Banner：sudo nmap -A --script=banner -p T:21,22,23,2
 ```
 将整理后的子域名存放在url.txt文件中。
 
-#### 使用方法：
+## 使用方法：
 ```
 $ python3.5 ihoneyScan.py -h
 usage: ihoneyScan.py [-h] [-f URL_FILE] [-t [MAX_THREADS]] [-m [MODULE]]
@@ -40,7 +40,7 @@ $ python3.5 ihoneyScan.py -m verify -f url.txt
 $ python3.5 ihoneyScan.py -m verify -t 100 -m 5 -f url.txt
 ```
 
-#### 输出主要分四部分：
+## 输出主要分四部分：
 ![result](images/result.png)
 * 解析IP
 * 状态码：如果有多个验证码，代表访问该域名所经过的所有跳转后的状态码，比如 http://jingyan.ganji.com => [302, 200] 就经过了一次临时跳转才停止，使用$ curl -I http://jingyan.ganji.com -L也可以看到整个跳转过程：
@@ -69,7 +69,7 @@ Cache-Control: private, must-revalidate
 
 2018-02-26 15:11:02
 
-#### Change Log：
+## Change Log：
 2018-02-26 增加解析IP<br>
 2018-02-25 增加识别TITLE<br>
 2018-02-09 多线程改为异步<br>
