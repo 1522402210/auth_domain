@@ -1,7 +1,7 @@
 # Auth_domain 域名验证工具
 
 写这个脚本的初衷是想模仿bugscan的一个端口指纹识别功能，看图:)：
-![bugscan](bugscan.png)
+![bugscan](images/bugscan.png)
 
 基本的端口扫描和端口指纹识别(www,smtp,mongodb,...)、Banner识别(Http响应中的Server,X-Powered-By,...)，这些功能都挺有用的。
 
@@ -20,8 +20,29 @@ nma指定开放端口识别Banner：sudo nmap -A --script=banner -p T:21,22,23,2
 ```
 将整理后的子域名存放在url.txt文件中。
 
-#### 输出主要分三部分：
-![result](result.png)
+#### 使用方法：
+```
+$ python3.5 ihoneyScan.py -h
+usage: ihoneyScan.py [-h] [-f URL_FILE] [-t [MAX_THREADS]] [-m [MODULE]]
+
+Batch of subdomain validation tool. --20180226
+
+optional arguments:
+  -h, --help        show this help message and exit
+  -f URL_FILE       Set subdomain file
+  -t [MAX_THREADS]  Set max threads
+  -m [MODULE]       Set scanning module, Choice: [verify,
+                    SingleThreadPortScan, MultiThreadPortScan,]
+```
+example(-t/-m 选项可省略)：
+```
+$ python3.5 ihoneyScan.py -m verify -f url.txt
+$ python3.5 ihoneyScan.py -m verify -t 100 -m 5 -f url.txt
+```
+
+#### 输出主要分四部分：
+![result](images/result.png)
+* 解析IP
 * 状态码：如果有多个验证码，代表访问该域名所经过的所有跳转后的状态码，比如 http://jingyan.ganji.com => [302, 200] 就经过了一次临时跳转才停止，使用$ curl -I http://jingyan.ganji.com -L也可以看到整个跳转过程：
 * Banner信息就简单了，就是获取Response中的HTTP 头中对应的值。
 * 网页TITLE。
@@ -46,4 +67,11 @@ Vary: Accept-Encoding
 Cache-Control: private, must-revalidate
 ```
 
-2018-02-25 00:47:27
+2018-02-26 15:11:02
+
+#### Change Log：
+2018-02-26 增加解析IP<br>
+2018-02-25 增加识别TITLE<br>
+2018-02-09 多线程改为异步<br>
+2018-02-02 增加批量解析子域名状态码、WEB容器、WEB开发语言<br>
+2018-02-02 project start<br>

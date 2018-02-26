@@ -1,15 +1,15 @@
 # -*- coding: utf8 -*-
 import requests
 import logging
-import re
-from bs4 import BeautifulSoup
+from re import search
+from socket import gethostbyname
 from concurrent import futures
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 
 class Src:
-    def __init__(self, max_threads=25, max_timeout=3, url_file='url.txt'):
+    def __init__(self, max_threads=10, max_timeout=5, url_file='url.txt'):
         self.max_threads = max_threads  # 最大线程数
         self.max_timeout = max_timeout  # 最大请求超时时间
         self.url_file = url_file  # 同级目录下存放爆破出来的域名的文件名
@@ -28,28 +28,10 @@ class Src:
         try:
             r = requests.get(url=url, headers=self.headers, timeout=self.max_timeout)
             content = r.content.decode()
-            # if content:
-            # print(content)
-            # re.S单行模式
-            # regex = re.compile('''<script(?:.*?)>(?:.*?)location.href=(?:[\'\"])(?P<redirect_url>.*?)(?:[\'\"])(?:.*?)</script>''', re.S)
-            # matcher_redirect_url = regex.search(content)
-            # print(matcher_redirect_url.group(0))
-            # if matcher_redirect_url:
-            #     url = url + '/' + str(matcher_redirect_url[0])
-            #     print(url)
-            #     r = requests.get(url=url, headers=self.headers, timeout=self.max_timeout)
-            #     content = r.content.decode()
+
+            ip_list = [gethostbyname(str(url.strip()))]
 
             if content:
-                # logging.info(content)
-
-                # # re.S单行模式
-                # regex = re.compile('''<script(?:.*)>(?:.*)location.href=(?:[\'\"])(?P<redirect_url>.*)(?:[\'\"])(?:.*)</script>''', re.S)
-                # matcher_redirect_url = regex.findall(content)
-                # if matcher_redirect_url:
-                #     logging.info(matcher_redirect_url)
-                #     pass
-
                 header_list = []  # ['nginx/1.10.3', 'PHP/5.6.20']
 
                 header_server = r.headers.get('Server')
@@ -59,22 +41,25 @@ class Src:
                 if header_server is not None: header_list.append(header_server)
 
                 if not r.history:
-
+                    status_lst = []
                     title_list = []
-                    url_title = re.search(r'<title>(.*)</title>', content)
-                    # print('===', url_title)
+
+                    url_title = search(r'<title>(.*)</title>', content)
+
                     if url_title:
                         url_title = url_title.group(1).strip().strip('\r').strip('\n')[:30]
                         title_list.append(url_title)
+                        status_lst.append(r.status_code)
 
-                    logging.info("[   ] {}   {}   {}   {}".format(url, r.status_code, header_list, title_list))
+                    # [   ] http://cs.crm.58.com   [200]   ['ASP.NET', 'Tengine']   ['58同城CRM微信客服系统']
+                    logging.info("[   ] {}  {}   {}   {}   {}".format(ip_list, url, status_lst, header_list, title_list))
                 else:
                     status_lst = []  # [301, 200, 302, 200]
                     title_list = []
 
                     url_title = ""
                     for code in r.history:
-                        url_title = re.search(r'<title>(.*)</title>', content)
+                        url_title = search(r'<title>(.*)</title>', content)
                         if url_title:
                             url_title = url_title.group(1).strip().strip('\r').strip('\n')[:30]
 
@@ -82,7 +67,7 @@ class Src:
                     status_lst.append(r.status_code)
                     title_list.append(url_title)
 
-                    logging.info("[+++] {}   {}   {}   {}".format(url, status_lst, header_list, title_list))
+                    logging.info("[***] {}  {}   {}   {}   {}".format(ip_list, url, status_lst, header_list, title_list))
         except:
             pass
 
@@ -93,14 +78,29 @@ class Src:
                     line = f.readline()
                     if line:
                         url = "http://" + str(line.strip())  # 去掉每行末尾的\r\n
-                        # self.headers['Referer'] = url
                         self.executor.submit(self.auth, url)
                     else:
                         break
         except Exception:
             pass
 
+# def main():
+#     parser = ArgumentParser(add_help=True, description='Batch of subdomain validation tool.  --20180225')
+#     parser.add_argument('-f', dest="url_file", help="Set subdomain file")
+#     parser.add_argument('-t', dest="max_threads", nargs='?', type=int, default=50, help="Set max threads")
+#     parser.add_argument('-m', dest="max_timeout", nargs='?', type=int, default=3, help="Set max timeout")
+#     parser.add_argument('-u', dest='url', help="Set url, example: http://localhost")
+#     args = parser.parse_args()
+#     parser.print_usage()
+#     print(args)
+#
+#     src58 = Src(max_threads=args.max_threads, max_timeout=args.max_timeout, url_file=args.url_file)
+#     src58.dispatcher()
 
-if __name__ == '__main__':
-    src58 = Src(max_threads=100, max_timeout=3, url_file='url.txt')
-    src58.dispatcher()
+
+# src58 = Src(max_threads=100, max_timeout=3, url_file='url.txt')
+# src58.dispatcher()
+
+
+# if __name__ == '__main__':
+#     main()
