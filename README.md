@@ -61,6 +61,7 @@ $ python3.5 ihoneyScan.py -m portscan -f ip.txt -t 100
 
 ## 输出主要分四部分：
 ![portscan](images/portscan.png)
+<br>
 端口扫描默认只扫描以下常见端口：
 ```
 [21, 22, 23, 53, 80, 111, 139, 161, 389, 443, 445, 512, 513, 514,
@@ -68,7 +69,7 @@ $ python3.5 ihoneyScan.py -m portscan -f ip.txt -t 100
  5984, 6082, 6379, 7001, 7002, 8000, 8080, 8081, 8090, 9000, 9090,
  8888, 9200, 9300, 10000, 11211, 27017, 27018, 50000, 50030, 50070]
 ```
-<br>
+
 ![result](images/result.png)
 * 解析IP
 * 状态码：如果有多个验证码，代表访问该域名所经过的所有跳转后的状态码，比如 http://jingyan.ganji.com => [302, 200] 就经过了一次临时跳转才停止，使用$ curl -I http://jingyan.ganji.com -L也可以看到整个跳转过程：
