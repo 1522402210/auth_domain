@@ -24,27 +24,39 @@ nma指定开放端口识别Banner：sudo nmap -A --script=banner -p T:21,22,23,2
 ## 使用方法：
 ```
 $ python3.5 ihoneyScan.py -h
-usage: ihoneyScan.py [-h] [-f URL_FILE] [-t [MAX_THREADS]] [-m [MODULE]]
+ _   _                            ____                  
+(_) | |__   ___  _ __   ___ _   _/ ___|  ___ __ _ _ __  
+| | | '_ \ / _ \| '_ \ / _ \ | | \___ \ / __/ _` | '_ \ 
+| | | | | | (_) | | | |  __/ |_| |___) | (_| (_| | | | |
+|_| |_| |_|\___/|_| |_|\___|\__, |____/ \___\__,_|_| |_|
+                            |___/                       
 
-Batch of subdomain validation tool. --20180226
+----------------------------------------------------------------
+usage: ihoneyScan.py [-h] [-f URL_FILE] [-t [MAX_THREADS]] [-m [MODULE]]
+                     [--ip [IP]] [-d [DOMAIN]]
+
+Batch of subdomain validation tool.
 
 optional arguments:
   -h, --help        show this help message and exit
   -f URL_FILE       Set subdomain file
-  -t [MAX_THREADS]  Set max threads, default 50
-  -m [MODULE]       Set scanning module, Choice: [verify,
-                    SingleThreadPortScan, MultiThreadPortScan,]
+  -t [MAX_THREADS]  Set max threads
+  -m [MODULE]       Set module, Choice: [subdomain, portscan]
+  --ip [IP]         Example: 207.148.23.27
+  -d [DOMAIN]       Example: www.ihoneysec.top
 ```
-example：
+Example：
 ```
 子域名验证：
-$ python3.5 ihoneyScan.py -m verify -f url.txt
-$ python3.5 ihoneyScan.py -m verify -t 100 -f url.txt
+$ python3.5 ihoneyScan.py -m subdomain -d www.ihoneysec.top
+$ python3.5 ihoneyScan.py -m subdomain -f url.txt
+$ python3.5 ihoneyScan.py -m subdomain -t 100 -f url.txt
 ```
 ```
 端口扫描：
-$ python3.5 ihoneyScan.py -m portscan -f ip.txt -t 100
 $ python3.5 ihoneyScan.py -m portscan --ip 207.148.23.27
+$ python3.5 ihoneyScan.py -m portscan -f ip.txt
+$ python3.5 ihoneyScan.py -m portscan -f ip.txt -t 100
 ```
 
 ## 输出主要分四部分：
@@ -74,10 +86,10 @@ Vary: Accept-Encoding
 Cache-Control: private, must-revalidate
 ```
 
-2018-02-26 15:11:02
+2018-02-26 21:53:56
 
 ## Change Log：
-2018-02-26 增加解析IP<br>
+2018-02-26 增加解析IP、端口扫描、--ip/-d参数<br>
 2018-02-25 增加识别TITLE<br>
 2018-02-09 多线程改为异步<br>
 2018-02-02 增加批量解析子域名状态码、WEB容器、WEB开发语言<br>
