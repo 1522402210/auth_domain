@@ -64,10 +64,9 @@ $ python3.5 ihoneyScan.py -m portscan --ip 207.148.23.27
 $ python3.5 ihoneyScan.py -m portscan -f ip.txt
 $ python3.5 ihoneyScan.py -m portscan -f ip.txt -t 100
 ```
-
 ## 输出主要分四部分：
 ![portscan](images/portscan.png)
-<br>
+
 端口扫描默认只扫描以下常见端口：
 ```
 [21, 22, 23, 53, 80, 111, 139, 161, 389, 443, 445, 512, 513, 514,
@@ -81,7 +80,7 @@ $ python3.5 ihoneyScan.py -m portscan -f ip.txt -t 100
 * 状态码：如果有多个验证码，代表访问该域名所经过的所有跳转后的状态码，比如 http://jingyan.ganji.com => [302, 200] 就经过了一次临时跳转才停止，使用$ curl -I http://jingyan.ganji.com -L也可以看到整个跳转过程：
 * Banner信息就简单了，就是获取Response中的HTTP 头中对应的值。
 * 网页TITLE。
-<br>
+
 ```
 $ curl -I http://jingyan.ganji.com -L
 HTTP/1.1 302 Found
