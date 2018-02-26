@@ -12,7 +12,7 @@
 
 基本的端口扫描和端口指纹识别(www,smtp,mongodb,...)、Banner识别(Http响应中的Server,X-Powered-By,...)，这些功能都挺有用的。
 
-端口扫描部分自己也写好了，纯粹的socket实现，但还是感觉没有masscan加nmap好用
+端口扫描部分自己也写好了，纯粹的telnet库实现，但还是感觉没有masscan加nmap好用
 masscan可以扫全端口：sudo masscan 11.22.33.44 -p1-65535
 nma指定开放端口识别Banner：sudo nmap -A --script=banner -p T:21,22,23,25,53,80,111,139,161,389,443 11.22.33.44
 
