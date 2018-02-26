@@ -1,4 +1,5 @@
 # Auth_domain 域名验证工具
+[![Python3](https://img.shields.io/badge/python-3.5-green.svg?style=plastic)](https://www.python.org/)
 
 写这个脚本的初衷是想模仿bugscan的一个端口指纹识别功能，看图:)：
 ![bugscan](images/bugscan.png)
@@ -36,8 +37,14 @@ optional arguments:
 ```
 example：
 ```
+子域名验证：
 $ python3.5 ihoneyScan.py -m verify -f url.txt
 $ python3.5 ihoneyScan.py -m verify -t 100 -f url.txt
+```
+```
+端口扫描：
+$ python3.5 ihoneyScan.py -m portscan -f ip.txt -t 100
+$ python3.5 ihoneyScan.py -m portscan --ip 207.148.23.27
 ```
 
 ## 输出主要分四部分：

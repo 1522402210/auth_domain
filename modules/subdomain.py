@@ -9,17 +9,14 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 
 class Src:
-    def __init__(self, max_threads=10, max_timeout=5, url_file='url.txt'):
+    def __init__(self, max_threads=1, max_timeout=5, url_file='url.txt'):
         self.max_threads = max_threads  # 最大线程数
         self.max_timeout = max_timeout  # 最大请求超时时间
-        self.url_file = url_file  # 同级目录下存放爆破出来的域名的文件名
-
-        self.executor = futures.ThreadPoolExecutor(max_workers=max_threads)
 
         self.headers = {
             'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36",
             # 'Referer': 'http://www.58.com/',
-            'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+            # 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
             # 'Cookie': '这里写你的Cookie',
             'Connection': 'close'
         }
@@ -29,6 +26,8 @@ class Src:
             r = requests.get(url=url, headers=self.headers, timeout=self.max_timeout)
             content = r.content.decode()
 
+            if 'http://' in url:
+                url = url.split('http://')[1]
             ip_list = [gethostbyname(str(url.strip()))]
 
             if content:
@@ -71,36 +70,23 @@ class Src:
         except:
             pass
 
-    def dispatcher(self):
+
+def dispatcher(max_threads=None, url_file=None, domain=None):
+    executor = futures.ThreadPoolExecutor(max_workers=max_threads)
+    src58 = Src(max_threads=max_threads)
+
+    if url_file is not None and domain is None:
         try:
-            with open(self.url_file) as f:
+            with open(url_file) as f:
                 while True:
                     line = f.readline()
                     if line:
                         url = "http://" + str(line.strip())  # 去掉每行末尾的\r\n
-                        self.executor.submit(self.auth, url)
+                        executor.submit(src58.auth, url)
                     else:
                         break
         except Exception:
             pass
-
-# def main():
-#     parser = ArgumentParser(add_help=True, description='Batch of subdomain validation tool.  --20180225')
-#     parser.add_argument('-f', dest="url_file", help="Set subdomain file")
-#     parser.add_argument('-t', dest="max_threads", nargs='?', type=int, default=50, help="Set max threads")
-#     parser.add_argument('-m', dest="max_timeout", nargs='?', type=int, default=3, help="Set max timeout")
-#     parser.add_argument('-u', dest='url', help="Set url, example: http://localhost")
-#     args = parser.parse_args()
-#     parser.print_usage()
-#     print(args)
-#
-#     src58 = Src(max_threads=args.max_threads, max_timeout=args.max_timeout, url_file=args.url_file)
-#     src58.dispatcher()
-
-
-# src58 = Src(max_threads=100, max_timeout=3, url_file='url.txt')
-# src58.dispatcher()
-
-
-# if __name__ == '__main__':
-#     main()
+    elif domain is not None and url_file is None:
+        url = "http://" + str(domain.strip())
+        executor.submit(src58.auth, url)
