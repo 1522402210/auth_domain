@@ -1,5 +1,11 @@
-# Auth_domain 域名验证工具
+# ihoneyScan 扫描器
 [![Python3](https://img.shields.io/badge/python-3.5-green.svg?style=plastic)](https://www.python.org/)
+
+## 模块：
+* 批量端口扫描
+* 批量子域名验证(解析IP,状态码,web容器,web开发语言,网页TITLE)
+
+<br>
 
 写这个脚本的初衷是想模仿bugscan的一个端口指纹识别功能，看图:)：
 ![bugscan](images/bugscan.png)
