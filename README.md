@@ -30,11 +30,11 @@ Batch of subdomain validation tool. --20180226
 optional arguments:
   -h, --help        show this help message and exit
   -f URL_FILE       Set subdomain file
-  -t [MAX_THREADS]  Set max threads
+  -t [MAX_THREADS]  Set max threads, default 50
   -m [MODULE]       Set scanning module, Choice: [verify,
                     SingleThreadPortScan, MultiThreadPortScan,]
 ```
-example(-t/-m 选项可省略)：
+example：
 ```
 $ python3.5 ihoneyScan.py -m verify -f url.txt
 $ python3.5 ihoneyScan.py -m verify -t 100 -m 5 -f url.txt
