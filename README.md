@@ -37,7 +37,7 @@ optional arguments:
 example：
 ```
 $ python3.5 ihoneyScan.py -m verify -f url.txt
-$ python3.5 ihoneyScan.py -m verify -t 100 -m 5 -f url.txt
+$ python3.5 ihoneyScan.py -m verify -t 100 -f url.txt
 ```
 
 ## 输出主要分四部分：
