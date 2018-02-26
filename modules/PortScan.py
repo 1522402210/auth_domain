@@ -71,7 +71,6 @@ def dispatcher(url_file=None, ip=None, max_thread=100):
             q.put(url)
 
     print(q.__dict__['queue'])
-    print(u'利用telnet扫描服务器常见开放端口')
     print('-' * 64)
     print(u'队列大小：' + str(q.qsize()))
 
