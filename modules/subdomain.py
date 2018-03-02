@@ -5,7 +5,7 @@ from re import search
 from socket import gethostbyname
 from concurrent import futures
 
-logging.basicConfig(level=logging.INFO, format="%(message)s")
+logging.basicConfig(level=logging.WARNING, format="%(message)s")
 
 
 class Src:
@@ -51,7 +51,7 @@ class Src:
                         status_lst.append(r.status_code)
 
                     # [   ] http://cs.crm.58.com   [200]   ['ASP.NET', 'Tengine']   ['58同城CRM微信客服系统']
-                    logging.info("[   ] {}  {}   {}   {}   {}".format(ip_list, url, status_lst, header_list, title_list))
+                    logging.warning("[   ] {}  {}   {}   {}   {}".format(ip_list, url, status_lst, header_list, title_list))
                 else:
                     status_lst = []  # [301, 200, 302, 200]
                     title_list = []
@@ -66,7 +66,7 @@ class Src:
                     status_lst.append(r.status_code)
                     title_list.append(url_title)
 
-                    logging.info("[***] {}  {}   {}   {}   {}".format(ip_list, url, status_lst, header_list, title_list))
+                    logging.warning("[***] {}  {}   {}   {}   {}".format(ip_list, url, status_lst, header_list, title_list))
         except:
             pass
 
